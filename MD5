@@ -1,0 +1,15 @@
+ef1cf5407560e5fb70fd2959467b62fc *DESCRIPTION
+50e72dc25c4aff0a873c110b32d179e7 *NAMESPACE
+81cb541511834bf0d484acc77f3f59f8 *R/area_calculation.R
+a084e999462890ccdacdfac7e6d0d7c6 *R/data_preparation.R
+4316435a17c027b70d5785905dca388a *R/origami_plot.R
+5960a6fe56f5c670321e6ea5fe277ea2 *R/origami_plot_pairwise.R
+bf43bbb232a62045c6603ec7609f59f4 *R/origami_plot_weighted.R
+ac6b03d03fcddacaaad1c1fccb9eebd0 *R/sucra.R
+8b120abf8a86dcbd1d7016900e3e2c82 *data/sucra.rda
+b7b04a11ea77f685d096e58cf2d01967 *man/area_calculation.Rd
+c53d529f05f203c47a499e5f4bfd70cd *man/data_preparation.Rd
+e8d4fca02c14daa9294ccd487c4f0802 *man/origami_plot.Rd
+2506cd69f7a499b1af1891b65266c3fb *man/origami_plot_pairwise.Rd
+f9be4de36cb526b7ee5884dee6582262 *man/origami_plot_weighted.Rd
+5ec2e1c22a462c302bfabcd81697c903 *man/sucra.Rd
