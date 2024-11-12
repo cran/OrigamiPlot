@@ -6,12 +6,14 @@
 \usage{
 origami_plot_weighted(
   df,
+  object,
   weight,
-  pcol,
-  pfcol = NULL,
+  min_value = NULL,
+  pcol = rgb(0.2, 0.5, 0.5, 1),
+  pfcol = rgb(0.2, 0.5, 0.5, 0.1),
   pcol2 = rgb(0.6, 0.3, 0.3, 1),
   pfcol2 = NULL,
-  axistype = 0,
+  axistype = 1,
   seg = 4,
   pty = 16,
   plty = 1:6,
@@ -24,7 +26,7 @@ origami_plot_weighted(
   axislabcol = "#808080",
   title = "",
   na.itp = TRUE,
-  centerzero = FALSE,
+  centerzero = TRUE,
   vlabels = NULL,
   vlcex = 1,
   caxislabels = seq(0, 1, by = 0.25),
@@ -34,19 +36,23 @@ origami_plot_weighted(
 )
 }
 \arguments{
-\item{df}{dataset processed with data_preparation or in the designated form}
+\item{df}{input dataframe in the required format}
+
+\item{object}{the name of the row that user wants to plot}
 
 \item{weight}{weight of each variable, sum up to 1}
 
-\item{pcol}{color of the line of the original polygon}
+\item{min_value}{auxiliary point in the graph, default is min(df)/2}
 
-\item{pfcol}{color to fill the area of the original polygon, default is NULL.}
+\item{pcol}{color of the line of the original polygon, default is rgb(0.2,0.5,0.5,1)}
+
+\item{pfcol}{color to fill the area of the original polygon, default is rgb(0.2,0.5,0.5,0.1).}
 
 \item{pcol2}{color of the line of the weighted polygon, default is rgb(0.6,0.3,0.3,1).}
 
 \item{pfcol2}{color to fill the area of the weighted polygon, default is NULL.}
 
-\item{axistype}{type of axes. 0:no axis label. 1:center axis label only. 2:around-the-chart label only. 3:both center and around-the-chart labels. Default is 0.}
+\item{axistype}{type of axes. 0:no axis label. 1:center axis label only. 2:around-the-chart label only. 3:both center and around-the-chart labels. Default is 1.}
 
 \item{seg}{number of segments for each axis, default is 4.}
 
@@ -99,8 +105,6 @@ to these outcomes relative to others. Note that the weights assigned should sum 
 }
 \examples{
 data(sucra)
-df_list <- data_preparation(sucra, min_value = 0.15)
-origami_plot_weighted(df = df_list[[6]], weight = c(0.15,0.25,0.3,0.2,0.1),
-pcol = rgb(0.2,0.5,0.5,1), pfcol = rgb(0.2,0.5,0.5,0.1),axistype=1)
+origami_plot_weighted(sucra, object="Intravertical PGE2", weight = c(0.15,0.25,0.3,0.2,0.1))
 
 }

@@ -2,13 +2,15 @@
 #' @import plotrix
 #' @import fmsb
 #'
-#' @param df1 first dataset processed with data_preparation or in the designated form
-#' @param df2 second dataset processed with data_preparation or in the designated form
-#' @param pcol1 color of the line of the first polygon
-#' @param pfcol1 color to fill the area of the first polygon, default is NULL.
-#' @param pcol2 color of the line of the second polygon
-#' @param pfcol2 color to fill the area of the second polygon, default is NULL.
-#' @param axistype type of axes. 0:no axis label. 1:center axis label only. 2:around-the-chart label only. 3:both center and around-the-chart labels. Default is 0.
+#' @param df input dataframe in the required format
+#' @param object1 the name of the first row that user wants to plot
+#' @param object2 the name of the second row that user wants to plot
+#' @param min_value auxiliary point in the graph, default is min(df)/2
+#' @param pcol1 color of the line of the first polygon, default is rgb(0.2,0.5,0.5,1)
+#' @param pfcol1 color to fill the area of the first polygon, default is rgb(0.2,0.5,0.5,0.1).
+#' @param pcol2 color of the line of the second polygon, rgb(0.6,0.3,0.3,1)
+#' @param pfcol2 color to fill the area of the second polygon, default is rgb(0.6,0.3,0.3,0.1).
+#' @param axistype type of axes. 0:no axis label. 1:center axis label only. 2:around-the-chart label only. 3:both center and around-the-chart labels. Default is 1.
 #' @param seg number of segments for each axis, default is 4.
 #' @param pty point symbol, default is 16. 32 means not printing the points.
 #' @param plty line types for plot data, default is 1:6
@@ -36,19 +38,34 @@
 #'
 #' @examples
 #' data(sucra)
-#' df_list <- data_preparation(sucra, min_value = 0.15)
-#' origami_plot_pairwise(df1=df_list[[3]], df2=df_list[[6]],
-#' pcol1 = rgb(0.2,0.5,0.5,1), pfcol1 = rgb(0.2,0.5,0.5,0.1),
-#' pcol2 = rgb(0.5,0.1,0.1,1),pfcol2 = rgb(0.5,0.1,0.1,0.1), axistype=1)
+#' origami_plot_pairwise(sucra, object1="Intravertical PGE2", object2="High-dose oral misoprostol")
 #'
 #' @export
 
-origami_plot_pairwise<- function(df1, df2, pcol1, pfcol1=NULL, pcol2,pfcol2=NULL, axistype=0, seg=4, pty=16, plty=1:6, plwd=1,
+origami_plot_pairwise<- function(df, object1, object2, min_value=NULL, pcol1=rgb(0.2,0.5,0.5,1), pfcol1=rgb(0.2,0.5,0.5,0.1),
+                                 pcol2=rgb(0.6,0.3,0.3,1),pfcol2=rgb(0.6,0.3,0.3,0.1), axistype=1, seg=4, pty=16, plty=1:6, plwd=1,
                                  pdensity=NULL, pangle=45, cglty=1.4, cglwd=0.1,
                                  cglcol="#000000", axislabcol="#808080", title="",
-                                 na.itp=TRUE, centerzero=FALSE, vlabels=NULL, vlcex=1,
+                                 na.itp=TRUE, centerzero=TRUE, vlabels=NULL, vlcex=1,
                                  caxislabels=seq(0,1,by = 0.25), calcex=NULL,
                                  paxislabels=NULL, palcex=NULL) {
+
+  df1 <- df[row.names(df)==object1,]
+  #check if object is valid
+  if(dim(df1)[1]==0){ stop("The object is not present in the dataframe. Please ensure the object matches the row name exactly.")}
+  if(dim(df1)[1]>1){ stop("The object is duplicated in the dataframe. Please ensure there are no duplicate row names.")}
+  if(dim(df1)[1]==1){
+    df1 <- data_preparation(df1,min_value = min_value)
+  }
+  min_value <- min(df1[3,])
+
+  df2 <- df[row.names(df)==object2,]
+  #check if object is valid
+  if(dim(df2)[1]==0){ stop("The object is not present in the dataframe. Please ensure the object matches the row name exactly.")}
+  if(dim(df2)[1]>1){ stop("The object is duplicated in the dataframe. Please ensure there are no duplicate row names.")}
+  if(dim(df2)[1]==1){
+    df2 <- data_preparation(df2,min_value = min_value)
+  }
 
   df_list <- list(df1,df2)
   pcol_list <- list(pcol1,pcol2)

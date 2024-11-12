@@ -12,13 +12,13 @@ data_preparation(df, min_value = NULL)
 \item{min_value}{auxiliary point in the graph, default is min(df)/2}
 }
 \value{
-df_list
+df
 }
 \description{
 Function to prepare the data into designated format
 }
 \details{
-This function takes a data frame as input and output a list of formatted data frames.
+This function takes a single-row dataframe as input and output a formatted dataframe.
 It introduces an auxiliary point for each variable, positioned equidistantly from the central point along auxiliary axes.
 Users can customize the distance from the point to the center.
 Without user customization, the distance defaults to half of the smallest value within the dataset.

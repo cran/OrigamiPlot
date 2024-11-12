@@ -1,15 +1,15 @@
-#' @title Function to generate weighted origami plot
+#' @title Function to generate pairwise origami plot
 #' @import plotrix
 #' @import fmsb
 #'
 #' @param df input dataframe in the required format
-#' @param object the name of the row that user wants to plot
-#' @param weight weight of each variable, sum up to 1
+#' @param object1 the name of the first row that user wants to plot
+#' @param object2 the name of the second row that user wants to plot
 #' @param min_value auxiliary point in the graph, default is min(df)/2
-#' @param pcol color of the line of the original polygon, default is rgb(0.2,0.5,0.5,1)
-#' @param pfcol color to fill the area of the original polygon, default is rgb(0.2,0.5,0.5,0.1).
-#' @param pcol2 color of the line of the weighted polygon, default is rgb(0.6,0.3,0.3,1).
-#' @param pfcol2 color to fill the area of the weighted polygon, default is NULL.
+#' @param pcol1 color of the line of the first polygon, default is rgb(0.2,0.5,0.5,1)
+#' @param pfcol1 color to fill the area of the first polygon, default is rgb(0.2,0.5,0.5,0.1).
+#' @param pcol2 color of the line of the second polygon, rgb(0.6,0.3,0.3,1)
+#' @param pfcol2 color to fill the area of the second polygon, default is rgb(0.6,0.3,0.3,0.1).
 #' @param axistype type of axes. 0:no axis label. 1:center axis label only. 2:around-the-chart label only. 3:both center and around-the-chart labels. Default is 1.
 #' @param seg number of segments for each axis, default is 4.
 #' @param pty point symbol, default is 16. 32 means not printing the points.
@@ -30,53 +30,48 @@
 #' @param calcex font size magnification for caxislabels, default is NULL
 #' @param paxislabels around-the-chart labels, default is NULL
 #' @param palcex font size magnification for paxislabels, default is NULL
-#' @details This function allows the creation of an origami plot with user-specified weights for different
-#' outcomes. The weighted origami plot is a refined analytical tool that facilitates the adjustment of individual
-#' attribute weights to accurately reflect their significance in determining overall performance. For instance, if
-#' certain outcomes hold greater clinical relevance based on a scientific question, the user can assign higher weights
-#' to these outcomes relative to others. Note that the weights assigned should sum up to 1.
+#' @details This function is an alias version of function origami_plot_pairwise
 #' @return NULL
 #'
 #' @examples
 #' data(sucra)
-#' origami_plot_weighted(sucra, object="Intravertical PGE2", weight = c(0.15,0.25,0.3,0.2,0.1))
+#' snowflake_plot_pairwise(sucra, object1="Intravertical PGE2", object2="High-dose oral misoprostol")
 #'
 #' @export
 
-origami_plot_weighted<- function(df, object, weight, min_value=NULL, pcol= rgb(0.2,0.5,0.5,1), pfcol= rgb(0.2,0.5,0.5,0.1),
-                                 pcol2 = rgb(0.6,0.3,0.3,1), pfcol2 = NULL, axistype=1, seg=4, pty=16,
-                                 plty=1:6, plwd=1, pdensity=NULL, pangle=45, cglty=1.4, cglwd=0.1,
+snowflake_plot_pairwise<- function(df, object1, object2, min_value=NULL, pcol1=rgb(0.2,0.5,0.5,1), pfcol1=rgb(0.2,0.5,0.5,0.1),
+                                 pcol2=rgb(0.6,0.3,0.3,1),pfcol2=rgb(0.6,0.3,0.3,0.1), axistype=1, seg=4, pty=16, plty=1:6, plwd=1,
+                                 pdensity=NULL, pangle=45, cglty=1.4, cglwd=0.1,
                                  cglcol="#000000", axislabcol="#808080", title="",
                                  na.itp=TRUE, centerzero=TRUE, vlabels=NULL, vlcex=1,
                                  caxislabels=seq(0,1,by = 0.25), calcex=NULL,
                                  paxislabels=NULL, palcex=NULL) {
 
-  if (abs(sum(weight) - 1) > .Machine$double.eps) { stop("The weight must sum up to 1"); return() }
-
-  df <- df[row.names(df)==object,]
+  df1 <- df[row.names(df)==object1,]
   #check if object is valid
-  if(dim(df)[1]==0){ stop("The object is not present in the dataframe. Please ensure the object matches the row name exactly.")}
-  if(dim(df)[1]>1){ stop("The object is duplicated in the dataframe. Please ensure there are no duplicate row names.")}
-  if(dim(df)[1]==1){
-    df2_original = df
-    df <- data_preparation(df,min_value = min_value)
+  if(dim(df1)[1]==0){ stop("The object is not present in the dataframe. Please ensure the object matches the row name exactly.")}
+  if(dim(df1)[1]>1){ stop("The object is duplicated in the dataframe. Please ensure there are no duplicate row names.")}
+  if(dim(df1)[1]==1){
+    df1 <- data_preparation(df1,min_value = min_value)
+  }
+  min_value <- min(df1[3,])
+
+  df2 <- df[row.names(df)==object2,]
+  #check if object is valid
+  if(dim(df2)[1]==0){ stop("The object is not present in the dataframe. Please ensure the object matches the row name exactly.")}
+  if(dim(df2)[1]>1){ stop("The object is duplicated in the dataframe. Please ensure there are no duplicate row names.")}
+  if(dim(df2)[1]==1){
+    df2 <- data_preparation(df2,min_value = min_value)
   }
 
+  df_list <- list(df1,df2)
+  pcol_list <- list(pcol1,pcol2)
+  pfcol_list <- list(pfcol1,pfcol2)
+  num_figure = 2
+  df <- df_list[[1]]
   n_prime <- ncol(df)/2
   aux_array_odd <- as.vector(seq(1,2*n_prime-1,2))
   aux_array_even <- as.vector(seq(2,2*n_prime,2))
-  #df2_original <- df[3,aux_array_odd]
-
-  max_weight <- max(weight)
-  df2 <- df2_original * (weight / max_weight)
-  min_value <- min(df[3,])
-  df2 <- data_preparation(df2, min_value = min_value)
-
-  df_list <- list(df,df2)
-
-  pcol_list <- list(pcol,pcol2)
-  pfcol_list <- list(pfcol,pfcol2)
-  num_figure = 2
 
   n_col = dim(df)[2]
   if (!is.data.frame(df)) { stop("The data must  be given as dataframe.\n"); return() }
@@ -102,20 +97,13 @@ origami_plot_weighted<- function(df, object, weight, min_value=NULL, pcol= rgb(0
     }
   }
   for (i in 1:num_figure) {
-
     df <- df_list[[i]]
     pcol <- pcol_list[[i]]
     pfcol<- pfcol_list[[i]]
-
-    if(i==2) {
-      plty = "longdash"
-      pfcol <- NULL
-      plwd <- 2
-    }
     if (centerzero) {
-     arrows(0, 0, xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
+      arrows(0, 0, xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
     } else {
-     arrows(xx/(seg+CGap), yy/(seg+CGap), xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
+      arrows(xx/(seg+CGap), yy/(seg+CGap), xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
     }
     PAXISLABELS <- df[1,1:n]
     if (!is.null(paxislabels)) PAXISLABELS <- paxislabels

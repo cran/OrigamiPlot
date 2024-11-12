@@ -30,20 +30,16 @@
 #' @param calcex font size magnification for caxislabels, default is NULL
 #' @param paxislabels around-the-chart labels, default is NULL
 #' @param palcex font size magnification for paxislabels, default is NULL
-#' @details This function allows the creation of an origami plot with user-specified weights for different
-#' outcomes. The weighted origami plot is a refined analytical tool that facilitates the adjustment of individual
-#' attribute weights to accurately reflect their significance in determining overall performance. For instance, if
-#' certain outcomes hold greater clinical relevance based on a scientific question, the user can assign higher weights
-#' to these outcomes relative to others. Note that the weights assigned should sum up to 1.
+#' @details This is the alias version of origami_plot_weighted function.
 #' @return NULL
 #'
 #' @examples
 #' data(sucra)
-#' origami_plot_weighted(sucra, object="Intravertical PGE2", weight = c(0.15,0.25,0.3,0.2,0.1))
+#' snowflake_plot_weighted(sucra, object="Intravertical PGE2", weight = c(0.15,0.25,0.3,0.2,0.1))
 #'
 #' @export
 
-origami_plot_weighted<- function(df, object, weight, min_value=NULL, pcol= rgb(0.2,0.5,0.5,1), pfcol= rgb(0.2,0.5,0.5,0.1),
+snowflake_plot_weighted<- function(df, object, weight, min_value=NULL, pcol= rgb(0.2,0.5,0.5,1), pfcol= rgb(0.2,0.5,0.5,0.1),
                                  pcol2 = rgb(0.6,0.3,0.3,1), pfcol2 = NULL, axistype=1, seg=4, pty=16,
                                  plty=1:6, plwd=1, pdensity=NULL, pangle=45, cglty=1.4, cglwd=0.1,
                                  cglcol="#000000", axislabcol="#808080", title="",
@@ -51,7 +47,7 @@ origami_plot_weighted<- function(df, object, weight, min_value=NULL, pcol= rgb(0
                                  caxislabels=seq(0,1,by = 0.25), calcex=NULL,
                                  paxislabels=NULL, palcex=NULL) {
 
-  if (abs(sum(weight) - 1) > .Machine$double.eps) { stop("The weight must sum up to 1"); return() }
+  if (abs(sum(weight) - 1) > .Machine$double.eps) { stop("The weight must sum up to 1\n"); return() }
 
   df <- df[row.names(df)==object,]
   #check if object is valid
@@ -113,9 +109,9 @@ origami_plot_weighted<- function(df, object, weight, min_value=NULL, pcol= rgb(0
       plwd <- 2
     }
     if (centerzero) {
-     arrows(0, 0, xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
+      arrows(0, 0, xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
     } else {
-     arrows(xx/(seg+CGap), yy/(seg+CGap), xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
+      arrows(xx/(seg+CGap), yy/(seg+CGap), xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
     }
     PAXISLABELS <- df[1,1:n]
     if (!is.null(paxislabels)) PAXISLABELS <- paxislabels

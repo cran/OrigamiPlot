@@ -7,23 +7,22 @@
 area_calculation(df)
 }
 \arguments{
-\item{df}{dataset processed with data_preparation or in the designated form}
+\item{df}{input dataframe in the required format}
 }
 \value{
-area
+result
 }
 \description{
 Function to calculate area of the generated polygon
 }
 \details{
-This function serves as a supplementary tool to compute the area of a generated origami
+This function serves as a supplementary tool to compute the area of each generated origami
 plot when the maximal area achievable within the defined parameters (when all the variables attain 1) is set to 1.
 The resulting calculated area offers an interpretation of the proportion between the actual origami plot and the
-maximum achievable area. An example of calculated area is shown in Figure 1.
+maximum achievable area.
 }
 \examples{
 data(sucra)
-df_list <- data_preparation(sucra, min_value = 0.15)
-area_calculation(df_list[[1]])
+area_calculation(sucra)
 
 }

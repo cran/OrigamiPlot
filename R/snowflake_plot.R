@@ -27,23 +27,16 @@
 #' @param calcex font size magnification for caxislabels, default is NULL
 #' @param paxislabels around-the-chart labels, default is NULL
 #' @param palcex font size magnification for paxislabels, default is NULL
-#' @details This is the main function in the R package that takes a list of data frame(s) and constructs
-#' an origami plot. The function plots the main axes of the radar chart as solid lines and marks the score of each
-#' variable on these axes with a filled circle. Additionally, it plots auxiliary axes as dashed lines at equal distances
-#' between each neighboring pair of primary axes with auxiliary points generated from data_preparation. Finally, the
-#' function connects all the points in order and obtain a connected region that resembles an origami star. Through this
-#' method, we successfully address the challenge of axis order affecting the area of the connected region in radar plots.
-#' The plot generated using ‘origami_plot’ benefit in that the area of the connected region within the origami plot remains
-#'  consistent regardless of axis sequence.
+#' @details This is an alias version of the function origami_plot.
 #' @return NULL
 #'
 #' @examples
 #' data(sucra)
-#' origami_plot(sucra, object="Intravertical PGE2")
+#' snowflake_plot(sucra, object="Intravertical PGE2")
 #'
 #' @export
 
-origami_plot<- function(df, object, min_value=NULL, pcol= rgb(0.2,0.5,0.5,1), pfcol= rgb(0.2,0.5,0.5,0.1),
+snowflake_plot<- function(df, object, min_value=NULL, pcol= rgb(0.2,0.5,0.5,1), pfcol= rgb(0.2,0.5,0.5,0.1),
                         axistype=1, seg=4, pty=16, plty=1:6, plwd=1,
                         pdensity=NULL, pangle=45, cglty=1.4, cglwd=0.1,
                         cglcol="#000000", axislabcol="#808080", title="",
@@ -89,9 +82,9 @@ origami_plot<- function(df, object, min_value=NULL, pcol= rgb(0.2,0.5,0.5,1), pf
   pcol <- pcol
   pfcol<- pfcol
   if (centerzero) {
-   arrows(0, 0, xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
+    arrows(0, 0, xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
   } else {
-   arrows(xx/(seg+CGap), yy/(seg+CGap), xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
+    arrows(xx/(seg+CGap), yy/(seg+CGap), xx*1, yy*1, lwd=cglwd, lty=cglty, length=0, col=cglcol)
   }
   PAXISLABELS <- df[1,1:n]
   if (!is.null(paxislabels)) PAXISLABELS <- paxislabels
